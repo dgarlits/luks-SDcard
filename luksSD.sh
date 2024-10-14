@@ -2,6 +2,8 @@
 
 # Specify the SD card device manually here
 
+clear
+
 echo "Make sure to check the name of the SD card using lsblk and change it in the script."
 
 SD_CARD="/dev/sdb1"  # Change this to /dev/sdb1 if needed on another machine
