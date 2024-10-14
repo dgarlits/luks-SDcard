@@ -1,9 +1,15 @@
 #!/bin/bash
 
+# Specify the SD card device manually here
+
+echo "Make sure to check the name of the SD card using lsblk and change it in the script."
+
+SD_CARD="/dev/sdb1"  # Change this to /dev/sdb1 if needed on another machine
+
 # Variables
-SD_CARD="/dev/mmcblk0p1"           # Change this if your SD card has a different name
 MAPPED_NAME="sdcard"               # Name to map the encrypted device in /dev/mapper
 MOUNT_POINT="/mnt/sdcard"          # Mount point
+USER_NAME="$USER"                  # Automatically gets the current user
 
 # Function to mount the SD card
 mount_sdcard() {
@@ -25,6 +31,10 @@ mount_sdcard() {
     sudo mount /dev/mapper/"$MAPPED_NAME" "$MOUNT_POINT"
     if [ $? -eq 0 ]; then
         echo "SD card successfully mounted at $MOUNT_POINT"
+
+        # Change ownership to the current user
+        sudo chown -R "$USER_NAME":"$USER_NAME" "$MOUNT_POINT"
+        echo "Mount point ownership changed to user: $USER_NAME"
     else
         echo "Failed to mount the SD card."
         sudo cryptsetup luksClose "$MAPPED_NAME"
